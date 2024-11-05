@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, FlatList, TouchableOpacity, Text } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';
@@ -11,7 +11,7 @@ type Product = {
   vat_rate: number;
 }
 
-const AUTH_USER = ''; // add your username here
+const AUTH_USER_TOKEN = ''; // use your own token
 
 export default function PosScreen() {
   const [basket, setBasket] = useState([]);
@@ -21,7 +21,7 @@ export default function PosScreen() {
   useEffect(() => {
     fetch('https://kanpla-code-challenge.up.railway.app/products', {
       headers: {
-        "x-auth-user": AUTH_USER
+        "x-auth-user": AUTH_USER_TOKEN
       }
     })
       .then((response) => response.json())
@@ -41,7 +41,7 @@ export default function PosScreen() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        "x-auth-user": AUTH_USER
+        "x-auth-user": AUTH_USER_TOKEN
       },
       body: JSON.stringify({
         total: basket.reduce((acc, item) => acc + item.price_unit, 0),
@@ -54,11 +54,11 @@ export default function PosScreen() {
       .catch((error) => console.error(error));
   }
 
-  const payOrder = () => {
+  const payOrder = useCallback(() => {
     fetch(`https://kanpla-code-challenge.up.railway.app/payments`, {
       method: 'POST',
       headers: {
-        "x-auth-user": AUTH_USER,
+        "x-auth-user": AUTH_USER_TOKEN,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -71,7 +71,7 @@ export default function PosScreen() {
         fetch(`https://kanpla-code-challenge.up.railway.app/orders/${json.order_id}`, {
           method: 'PATCH',
           headers: {
-            "x-auth-user": AUTH_USER
+            "x-auth-user": AUTH_USER_TOKEN
           },
           body: JSON.stringify({
             status: 'completed',
@@ -85,7 +85,7 @@ export default function PosScreen() {
           .catch((error) => console.error(error));
       })
       .catch((error) => console.error(error));
-  }
+  }, [orderId, basket]);
 
   return (
     <ThemedView style={styles.container}>

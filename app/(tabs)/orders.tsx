@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-const AUTH_USER = ''; // add your username here
+const AUTH_USER_TOKEN = ''; // use your own token
 
 export default function TabTwoScreen() {
   const [orders, setOrders] = useState([]);
@@ -18,7 +18,7 @@ export default function TabTwoScreen() {
     try {
       const response = await fetch('https://kanpla-code-challenge.up.railway.app/orders', {
         headers: {
-          "x-auth-user": AUTH_USER
+          "x-auth-user": AUTH_USER_TOKEN
         }
       })
       const data = await response.json() as { id: string, created_at: string, amount: number }[];
