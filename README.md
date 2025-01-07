@@ -1,7 +1,7 @@
 # Kanpla React Native Challenge
 Welcome to the React Native challenge! 👋
 
-This exercise is designed to give you a taste of working on a production codebase as part of our team (we promise that our codebase looks better). 
+This exercise is designed to test your ability to work in a production environment and uncover your work practices. The existing codebase is intentionally messy, just like the real world sometimes is (we promise our codebase looks better).
 
 We’re excited to see how you tackle the tasks! Happy coding 🚀
 
@@ -18,6 +18,8 @@ When you're ready to start the challenge:
 
 4. When you’re ready to submit your solution, share the link to your repo with us. If you prefer to keep it private, let us know so we can provide emails for repo access.
 
+5. Include a **5-minute Loom video presentation** explaining your approach and demoing the solution. This helps us understand your thought process and the implemented features.
+
 >**Questions?** If you have questions or need clarification, feel free to reach out to. We’re here to help!
 
 ### Approach and Notes
@@ -31,21 +33,14 @@ This challenge involves adding features to our very-much in-progress React Nativ
 
 ### Tasks
 
-#### Task 1: Error Handling
-* Implement clear error handling for data fetching and order creation failures.
-* Show user-friendly error messages.
-
-#### Task 2: Optimistic Updates
+#### Task: Optimize Order Creation
+* Handle order creation in offline mode with syncing when back online.
 * Since the API can be slow, implement optimistic updates to keep the app responsive.
+* Implement clear error handling and user-friendly messages for errors.
 
-#### Task 3: UI Improvements
+#### Bonus: Improve the UI Design
 * Improve the visual design and add support for different screen orientations.
 * Feel free to apply your design skills to make the app look polished.
-
-#### Task 4 (Bonus): Offline Order Creation
-
-* Handle order creation in offline mode with syncing when back online. This is an extra task, so a full solution isn’t expected. However, outline your approach.
-
 
 ## Development Environment
 
