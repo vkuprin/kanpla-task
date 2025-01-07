@@ -34,9 +34,10 @@ This challenge involves adding features to our very-much in-progress React Nativ
 ### Tasks
 
 #### Task: Optimize Order Creation
-* Handle order creation in offline mode with syncing when back online.
+* Handle order creation in offline mode with syncing when back online. Fully offline functionality can be complex, so it’s fine to outline the solution but develop only an MVP version. Your MVP should serve as a basis to have a good discussion around how a full solution could be implemented.
 * Since the API can be slow, implement optimistic updates to keep the app responsive.
 * Implement clear error handling and user-friendly messages for errors.
+* Test it out, and have a look at what could be done to deliver a better experience.
 
 #### Bonus: Improve the UI Design
 * Improve the visual design and add support for different screen orientations.
