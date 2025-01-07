@@ -1,7 +1,7 @@
 # Kanpla React Native Challenge
 Welcome to the React Native challenge! 👋
 
-This exercise is designed to give you a taste of working on a production codebase as part of our team (we promise that our codebase looks better). 
+This exercise is designed to test your ability to work in a production environment and uncover your work practices. The existing codebase is intentionally messy, just like the real world sometimes is (we promise our codebase looks better).
 
 We’re excited to see how you tackle the tasks! Happy coding 🚀
 
@@ -10,13 +10,15 @@ When you're ready to start the challenge:
 
 1. **Clone** (not fork) this repository.
 
-2. Implement each task as a separate **pull request (PR)** against your version of the repository.
+2. Break the challenge into smaller tasks and implement each task as a separate **pull request (PR)** against your version of the repository.
    * Each PR should be prepared as if you were contributing to a live team project.
    * Provide a brief description of your solution and your reasoning in each PR.
 
 3. **Merge each PR** upon completion of a task, so we can review your approach to each challenge individually.
 
 4. When you’re ready to submit your solution, share the link to your repo with us. If you prefer to keep it private, let us know so we can provide emails for repo access.
+
+5. Include a **5-minute Loom video presentation** explaining your approach and demoing the solution. This helps us understand your thought process and the implemented features.
 
 >**Questions?** If you have questions or need clarification, feel free to reach out to. We’re here to help!
 
@@ -29,23 +31,18 @@ We’d love to understand your approach. Feel free to include notes on your deci
 ## Challenge Overview
 This challenge involves adding features to our very-much in-progress React Native POS (Point of Sale) app. You’ll be handling error management, optimistic updates, and responsive design to improve the app’s functionality and user experience.
 
-### Tasks
+### Goals
 
-#### Task 1: Error Handling
-* Implement clear error handling for data fetching and order creation failures.
-* Show user-friendly error messages.
+#### Optimize Checkout Flow
+* Add loading states and implement clear, user-friendly error handling.
+* Ensure orders are created with the correct price and are visible in the order history.
+* Handle slow API responses by implementing optimistic updates to maintain responsiveness.
+* Introduce basic offline functionality. Fully offline features are complex, so focus on creating an MVP and outline how a full solution could be implemented.
 
-#### Task 2: Optimistic Updates
-* Since the API can be slow, implement optimistic updates to keep the app responsive.
-
-#### Task 3: UI Improvements
-* Improve the visual design and add support for different screen orientations.
-* Feel free to apply your design skills to make the app look polished.
-
-#### Task 4 (Bonus): Offline Order Creation
-
-* Handle order creation in offline mode with syncing when back online. This is an extra task, so a full solution isn’t expected. However, outline your approach.
-
+#### Improve the UI Design (Bonus)
+* Enhance the app’s visual design.
+* Add support for different screen orientations.
+* Feel free to showcase your design skills and make the app look polished.
 
 ## Development Environment
 
