@@ -10,7 +10,7 @@ When you're ready to start the challenge:
 
 1. **Clone** (not fork) this repository.
 
-2. Implement each task as a separate **pull request (PR)** against your version of the repository.
+2. Break the challenge into smaller tasks and implement each task as a separate **pull request (PR)** against your version of the repository.
    * Each PR should be prepared as if you were contributing to a live team project.
    * Provide a brief description of your solution and your reasoning in each PR.
 
@@ -31,17 +31,18 @@ We’d love to understand your approach. Feel free to include notes on your deci
 ## Challenge Overview
 This challenge involves adding features to our very-much in-progress React Native POS (Point of Sale) app. You’ll be handling error management, optimistic updates, and responsive design to improve the app’s functionality and user experience.
 
-### Tasks
+### Goals
 
-#### Task: Optimize Order Creation
-* Handle order creation in offline mode with syncing when back online. Fully offline functionality can be complex, so it’s fine to outline the solution but develop only an MVP version. Your MVP should serve as a basis to have a good discussion around how a full solution could be implemented.
-* Since the API can be slow, implement optimistic updates to keep the app responsive.
-* Implement clear error handling and user-friendly messages for errors.
-* Test it out, and have a look at what could be done to deliver a better experience.
+#### Optimize Checkout Flow
+* Add loading states and implement clear, user-friendly error handling.
+* Ensure orders are created with the correct price and are visible in the order history.
+* Handle slow API responses by implementing optimistic updates to maintain responsiveness.
+* Introduce basic offline functionality. Fully offline features are complex, so focus on creating an MVP and outline how a full solution could be implemented.
 
-#### Bonus: Improve the UI Design
-* Improve the visual design and add support for different screen orientations.
-* Feel free to apply your design skills to make the app look polished.
+#### Improve the UI Design (Bonus)
+* Enhance the app’s visual design.
+* Add support for different screen orientations.
+* Feel free to showcase your design skills and make the app look polished.
 
 ## Development Environment
 
