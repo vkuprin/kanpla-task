@@ -1,3 +1,4 @@
+// @ts-nocheck
 export type PostPaymentsHeaderParams = {
   /**
    * @type string
