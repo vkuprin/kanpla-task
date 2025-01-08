@@ -5,8 +5,13 @@ export type {
   DeletePaymentsById404,
   DeletePaymentsByIdMutationResponse,
   DeletePaymentsByIdMutation,
-} from './DeletePaymentsById.ts'
-export type { GetOrdersHeaderParams, GetOrders200, GetOrdersQueryResponse, GetOrdersQuery } from './GetOrders.ts'
+} from "./DeletePaymentsById.ts";
+export type {
+  GetOrdersHeaderParams,
+  GetOrders200,
+  GetOrdersQueryResponse,
+  GetOrdersQuery,
+} from "./GetOrders.ts";
 export type {
   GetOrdersByIdPathParams,
   GetOrdersByIdHeaderParams,
@@ -15,7 +20,7 @@ export type {
   GetOrdersById404,
   GetOrdersByIdQueryResponse,
   GetOrdersByIdQuery,
-} from './GetOrdersById.ts'
+} from "./GetOrdersById.ts";
 export type {
   GetPaymentsByIdPathParams,
   GetPaymentsByIdHeaderParams,
@@ -24,8 +29,14 @@ export type {
   GetPaymentsById404,
   GetPaymentsByIdQueryResponse,
   GetPaymentsByIdQuery,
-} from './GetPaymentsById.ts'
-export type { GetProductsHeaderParams, GetProducts200, GetProducts503, GetProductsQueryResponse, GetProductsQuery } from './GetProducts.ts'
+} from "./GetPaymentsById.ts";
+export type {
+  GetProductsHeaderParams,
+  GetProducts200,
+  GetProducts503,
+  GetProductsQueryResponse,
+  GetProductsQuery,
+} from "./GetProducts.ts";
 export type {
   GetProductsByIdPathParams,
   GetProductsByIdHeaderParams,
@@ -33,7 +44,7 @@ export type {
   GetProductsById404,
   GetProductsByIdQueryResponse,
   GetProductsByIdQuery,
-} from './GetProductsById.ts'
+} from "./GetProductsById.ts";
 export type {
   PatchOrdersByIdPathParams,
   PatchOrdersByIdHeaderParams,
@@ -42,7 +53,7 @@ export type {
   PatchOrdersByIdMutationRequest,
   PatchOrdersByIdMutationResponse,
   PatchOrdersByIdMutation,
-} from './PatchOrdersById.ts'
+} from "./PatchOrdersById.ts";
 export type {
   PostOrdersHeaderParams,
   PostOrders201,
@@ -51,7 +62,7 @@ export type {
   PostOrdersMutationRequest,
   PostOrdersMutationResponse,
   PostOrdersMutation,
-} from './PostOrders.ts'
+} from "./PostOrders.ts";
 export type {
   PostPaymentsHeaderParams,
   PostPayments201,
@@ -61,4 +72,4 @@ export type {
   PostPaymentsMutationRequest,
   PostPaymentsMutationResponse,
   PostPaymentsMutation,
-} from './PostPayments.ts'
+} from "./PostPayments.ts";

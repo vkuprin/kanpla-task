@@ -2,34 +2,34 @@ export type GetProductsHeaderParams = {
   /**
    * @type string
    */
-  'x-auth-user': string
-}
+  "x-auth-user": string;
+};
 
 export type GetProducts200 = {
   /**
    * @type string
    */
-  id: string
+  id: string;
   /**
    * @type string
    */
-  name: string
+  name: string;
   /**
    * @type number
    */
-  vat_rate: number
+  vat_rate: number;
   /**
    * @type number
    */
-  price_unit: number
-}[]
+  price_unit: number;
+}[];
 
-export type GetProducts503 = string
+export type GetProducts503 = string;
 
-export type GetProductsQueryResponse = GetProducts200
+export type GetProductsQueryResponse = GetProducts200;
 
 export type GetProductsQuery = {
-  Response: GetProducts200
-  HeaderParams: GetProductsHeaderParams
-  Errors: GetProducts503
-}
+  Response: GetProducts200;
+  HeaderParams: GetProductsHeaderParams;
+  Errors: GetProducts503;
+};
