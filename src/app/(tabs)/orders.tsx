@@ -1,8 +1,13 @@
 import React from "react";
-import { FlatList, ActivityIndicator, TouchableOpacity } from "react-native";
+import {
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { StyleSheet } from "react-native";
 import { format } from "date-fns";
-
+import NetInfo from "@react-native-community/netinfo";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { useGetOrders } from "@/api";
@@ -18,23 +23,43 @@ interface Order {
   status: string;
 }
 
-export default function TabTwoScreen() {
-  const {
-    data: orders,
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isRefetching,
-  } = useGetOrders(
-    { "x-auth-user": AUTH_USER_TOKEN },
-    {
-      query: {
-        select: (response) => response.data,
-        staleTime: 5 * 60 * 1000, // 5 minutes
+export default function OrdersScreen() {
+  const [isOnline, setIsOnline] = React.useState(true);
+
+  React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsOnline(state.isConnected ?? false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const { data, isLoading, isError, error, refetch, isRefetching } =
+    useGetOrders(
+      { "x-auth-user": AUTH_USER_TOKEN },
+      {
+        query: {
+          staleTime: 5 * 60 * 1000, // 5 minutes
+          retry: isOnline ? 3 : 0,
+          // onSuccess: () => {
+          //   if (!isOnline) {
+          //     Alert.alert("Connection Restored", "Orders have been updated");
+          //   }
+          // },
+        },
       },
-    },
-  );
+    );
+
+  // Handle error outside the query options
+  React.useEffect(() => {
+    if (isError) {
+      Alert.alert(
+        "Error",
+        "Failed to load orders. Please check your connection and try again.",
+      );
+    }
+  }, [isError]);
+
+  const orders = data?.data ?? [];
 
   const formatDate = (dateString: string): string => {
     try {
@@ -57,12 +82,28 @@ export default function TabTwoScreen() {
     }
   };
 
+  const handleRefresh = async () => {
+    if (!isOnline) {
+      Alert.alert("Offline", "Please check your internet connection");
+      return;
+    }
+    await refetch();
+  };
+
   const renderOrderItem = ({ item }: { item: Order }) => (
-    <ThemedView style={styles.orderItem}>
+    <TouchableOpacity
+      style={styles.orderItem}
+      onPress={() => {
+        Alert.alert(
+          `Order #${item.id.slice(0, 6)}`,
+          `Status: ${item.status}\nAmount: $${item.amount_total.toFixed(2)}\nCreated: ${formatDate(item.created_at)}`,
+        );
+      }}
+    >
       <ThemedView style={styles.orderHeader}>
         <ThemedView style={styles.orderIdContainer}>
           <ThemedText style={styles.label}>Order ID:</ThemedText>
-          <ThemedText style={styles.orderId}>{item.id}</ThemedText>
+          <ThemedText style={styles.orderId}>{item.id.slice(0, 6)}</ThemedText>
         </ThemedView>
         <ThemedView
           style={[
@@ -86,59 +127,56 @@ export default function TabTwoScreen() {
             ${item.amount_total.toFixed(2)}
           </ThemedText>
         </ThemedView>
-
-        <ThemedView style={styles.detailRow}>
-          <ThemedText style={styles.label}>User ID:</ThemedText>
-          <ThemedText>{item.user_id}</ThemedText>
-        </ThemedView>
-
-        {item.basket_id && (
-          <ThemedView style={styles.detailRow}>
-            <ThemedText style={styles.label}>Basket ID:</ThemedText>
-            <ThemedText>{item.basket_id}</ThemedText>
-          </ThemedView>
-        )}
       </ThemedView>
-    </ThemedView>
+    </TouchableOpacity>
   );
 
   if (isLoading) {
     return (
       <ThemedView style={styles.loadingContainer}>
-        <ActivityIndicator size="large" />
-      </ThemedView>
-    );
-  }
-
-  if (isError) {
-    return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.errorText}>
-          Error loading orders:{" "}
-          {error instanceof Error ? error.message : "Unknown error"}
-        </ThemedText>
-        <TouchableOpacity onPress={() => refetch()} style={styles.retryButton}>
-          <ThemedText>Retry</ThemedText>
-        </TouchableOpacity>
+        <ActivityIndicator size="large" color="#173829" />
+        <ThemedText style={styles.loadingText}>Loading orders...</ThemedText>
       </ThemedView>
     );
   }
 
   return (
     <ThemedView style={styles.container}>
+      {!isOnline && (
+        <ThemedView style={styles.offlineBanner}>
+          <ThemedText style={styles.offlineText}>You are offline</ThemedText>
+        </ThemedView>
+      )}
+
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Orders</ThemedText>
         {isRefetching && <ActivityIndicator style={styles.refreshIndicator} />}
       </ThemedView>
 
-      <FlatList<Order>
-        data={orders}
-        keyExtractor={(item) => item.id}
-        renderItem={renderOrderItem}
-        contentContainerStyle={styles.listContainer}
-        refreshing={isRefetching}
-        onRefresh={refetch}
-      />
+      {isError ? (
+        <ThemedView style={styles.errorContainer}>
+          <ThemedText style={styles.errorText}>
+            {error instanceof Error ? error.message : "Failed to load orders"}
+          </ThemedText>
+          <TouchableOpacity style={styles.retryButton} onPress={handleRefresh}>
+            <ThemedText style={styles.retryText}>Retry</ThemedText>
+          </TouchableOpacity>
+        </ThemedView>
+      ) : orders.length === 0 ? (
+        <ThemedView style={styles.emptyContainer}>
+          <ThemedText style={styles.emptyText}>No orders found</ThemedText>
+        </ThemedView>
+      ) : (
+        <FlatList<Order>
+          data={orders}
+          keyExtractor={(item) => item.id}
+          renderItem={renderOrderItem}
+          contentContainerStyle={styles.listContainer}
+          refreshing={isRefetching}
+          onRefresh={handleRefresh}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </ThemedView>
   );
 }
@@ -159,8 +197,39 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
+  },
   listContainer: {
     gap: 12,
+    paddingBottom: 20,
+  },
+  offlineBanner: {
+    backgroundColor: "#ff4444",
+    padding: 8,
+    alignItems: "center",
+    marginBottom: 16,
+    borderRadius: 8,
+  },
+  offlineText: {
+    color: "white",
+    fontWeight: "bold",
   },
   orderItem: {
     padding: 16,
@@ -192,6 +261,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
     fontWeight: "600",
+    textTransform: "capitalize",
   },
   orderDetails: {
     gap: 8,
@@ -213,12 +283,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 16,
     color: "#F44336",
+    fontSize: 16,
   },
   retryButton: {
     padding: 12,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: "#173829",
     borderRadius: 8,
+    minWidth: 120,
     alignItems: "center",
+  },
+  retryText: {
+    color: "white",
+    fontWeight: "600",
   },
   refreshIndicator: {
     marginLeft: 8,
