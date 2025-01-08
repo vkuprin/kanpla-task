@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import NetInfo from "@react-native-community/netinfo";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useGetOrders } from "@/api";
+import { useGetOrders } from "../../services";
 
 const AUTH_USER_TOKEN = process.env.EXPO_PUBLIC_API_KEY!;
 

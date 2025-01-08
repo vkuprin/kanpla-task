@@ -2,24 +2,37 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   FlatList,
-  TouchableOpacity,
   ActivityIndicator,
+  TouchableOpacity,
   Alert,
 } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useGetProducts, usePostOrders, usePostPayments } from "@/api/hooks";
+import {
+  useGetProducts,
+  usePostOrders,
+  usePostPayments,
+} from "@/services/hooks";
 import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import type { GetProducts200 } from "@/api/types";
-
-export type Product = GetProducts200[number];
+import { useBasket } from "@/hooks/useBasket";
+import { BasketItem } from "@/components/BasketItem";
+import { ProductItem } from "@/components/ProductItem";
+import { GetProducts200 } from "../../services";
 
 const AUTH_USER_TOKEN = process.env.EXPO_PUBLIC_API_KEY!;
 const OFFLINE_QUEUE_KEY = "@offline_queue";
 
+type Product = GetProducts200[number];
+
 export default function PosScreen() {
-  const [basket, setBasket] = useState<Product[]>([]);
+  const {
+    items: basket,
+    addItem,
+    removeItem,
+    calculateTotal,
+    clearBasket,
+  } = useBasket();
   const [orderId, setOrderId] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(true);
 
@@ -53,7 +66,7 @@ export default function PosScreen() {
         if (!isOnline) {
           const order = {
             basket,
-            total: calculateBasketTotal(),
+            total: calculateTotal(),
             timestamp: Date.now(),
           };
           const queue = await getOfflineQueue();
@@ -79,7 +92,7 @@ export default function PosScreen() {
   const { mutate: payOrder, isPending: isPaying } = usePostPayments({
     mutation: {
       onSuccess: () => {
-        setBasket([]);
+        clearBasket();
         setOrderId(null);
         Alert.alert("Success", "Payment completed successfully!");
       },
@@ -88,14 +101,6 @@ export default function PosScreen() {
       },
     },
   });
-
-  const calculateItemTotal = (item: Product) => {
-    return item.price_unit * (1 + item.vat_rate);
-  };
-
-  const calculateBasketTotal = () => {
-    return basket.reduce((total, item) => total + calculateItemTotal(item), 0);
-  };
 
   const getOfflineQueue = async () => {
     try {
@@ -106,17 +111,9 @@ export default function PosScreen() {
     }
   };
 
-  const handleAddToBasket = (product: Product) => {
-    setBasket((prev) => [...prev, product]);
-  };
-
-  const handleRemoveFromBasket = (index: number) => {
-    setBasket((prev) => prev.filter((_, i) => i !== index));
-  };
-
   const handleCreateOrder = () => {
     createOrder({
-      data: { total: calculateBasketTotal() },
+      data: { total: calculateTotal() },
       headers: { "x-auth-user": AUTH_USER_TOKEN },
     });
   };
@@ -126,7 +123,7 @@ export default function PosScreen() {
     payOrder({
       data: {
         order_id: orderId,
-        amount: calculateBasketTotal(),
+        amount: calculateTotal(),
       },
       headers: { "x-auth-user": AUTH_USER_TOKEN },
     });
@@ -157,36 +154,6 @@ export default function PosScreen() {
     );
   }
 
-  const renderProduct = ({ item }: { item: Product }) => (
-    <TouchableOpacity
-      style={styles.product}
-      onPress={() => handleAddToBasket(item)}
-    >
-      <ThemedText style={styles.text}>{item.name}</ThemedText>
-      <ThemedText style={styles.text}>
-        ${calculateItemTotal(item).toFixed(2)}
-      </ThemedText>
-    </TouchableOpacity>
-  );
-
-  const renderBasketItem = ({
-    item,
-    index,
-  }: {
-    item: Product;
-    index: number;
-  }) => (
-    <ThemedView style={styles.basketItem}>
-      <ThemedText style={styles.text}>{item.name}</ThemedText>
-      <ThemedText style={styles.text}>
-        ${calculateItemTotal(item).toFixed(2)}
-      </ThemedText>
-      <TouchableOpacity onPress={() => handleRemoveFromBasket(index)}>
-        <ThemedText style={styles.removeText}>×</ThemedText>
-      </TouchableOpacity>
-    </ThemedView>
-  );
-
   return (
     <ThemedView style={styles.container}>
       {!isOnline && (
@@ -198,7 +165,9 @@ export default function PosScreen() {
       <ThemedView style={styles.productGrid}>
         <FlatList<Product>
           data={products}
-          renderItem={renderProduct}
+          renderItem={({ item }) => (
+            <ProductItem product={item} onAddToBasket={addItem} />
+          )}
           keyExtractor={(item) => item.id}
           numColumns={2}
         />
@@ -211,12 +180,18 @@ export default function PosScreen() {
 
         <FlatList<Product>
           data={basket}
-          renderItem={renderBasketItem}
+          renderItem={({ item, index }) => (
+            <BasketItem
+              item={item}
+              total={item.price_unit * (1 + item.vat_rate)}
+              onRemove={() => removeItem(index)}
+            />
+          )}
           keyExtractor={(item, index) => `${item.id}_${index}`}
           ListFooterComponent={() => (
             <>
               <ThemedText style={[styles.text, styles.totalText]}>
-                Total: ${calculateBasketTotal().toFixed(2)}
+                Total: ${calculateTotal().toFixed(2)}
               </ThemedText>
 
               <TouchableOpacity

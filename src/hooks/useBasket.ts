@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { GetProducts200 } from "@/api/types";
+import type { GetProducts200 } from "@/services/types";
 
 type Product = GetProducts200[number];
 

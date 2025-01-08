@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import type { GetProducts200 } from "@/api/types";
+import type { GetProducts200 } from "@/services/types";
 
 type Props = {
   item: GetProducts200[number];

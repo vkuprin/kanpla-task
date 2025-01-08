@@ -9,7 +9,7 @@ export default defineConfig({
     path: "./schema.json",
   },
   output: {
-    path: "./src/api",
+    path: "./src/services",
     clean: true,
   },
   plugins: [
