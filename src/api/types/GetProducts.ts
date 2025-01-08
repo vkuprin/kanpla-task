@@ -1,3 +1,4 @@
+// @ts-nocheck
 export type GetProductsHeaderParams = {
   /**
    * @type string

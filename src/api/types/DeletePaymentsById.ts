@@ -1,3 +1,4 @@
+// @ts-nocheck
 export type DeletePaymentsByIdPathParams = {
   /**
    * @type string

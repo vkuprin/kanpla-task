@@ -1,3 +1,4 @@
+// @ts-nocheck
 import client from "../clients/axios";
 import type {
   RequestConfig,

@@ -3372,7 +3372,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.5.12":
+"@types/jest@npm:^29.5.14":
   version: 29.5.14
   resolution: "@types/jest@npm:29.5.14"
   dependencies:
@@ -4892,7 +4892,7 @@ __metadata:
     "@react-navigation/native": "npm:^6.0.2"
     "@tanstack/react-query": "npm:^5.62.16"
     "@types/axios": "npm:^0.14.4"
-    "@types/jest": "npm:^29.5.12"
+    "@types/jest": "npm:^29.5.14"
     "@types/react": "npm:~18.2.45"
     "@types/react-test-renderer": "npm:^18.0.7"
     axios: "npm:^1.7.9"

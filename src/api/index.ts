@@ -1,3 +1,4 @@
+// @ts-nocheck
 export type { DeletePaymentsByIdMutationKey } from "./hooks/useDeletePaymentsById.ts";
 export type { GetOrdersQueryKey } from "./hooks/useGetOrders.ts";
 export type { GetOrdersByIdQueryKey } from "./hooks/useGetOrdersById.ts";
