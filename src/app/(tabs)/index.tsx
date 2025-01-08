@@ -1,142 +1,222 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, FlatList, TouchableOpacity, Text } from "react-native";
-
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-
-type Product = {
-  id: string;
-  name: string;
-  price_unit: number;
-  vat_rate: number;
-};
+import {
+  useGetProducts,
+  usePostOrders,
+  usePostPayments,
+} from "@/services/hooks";
+import NetInfo from "@react-native-community/netinfo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useBasket } from "@/hooks/useBasket";
+import { BasketItem } from "@/components/BasketItem";
+import { ProductItem } from "@/components/ProductItem";
+import { GetProducts200 } from "@/services";
 
 const AUTH_USER_TOKEN = process.env.EXPO_PUBLIC_API_KEY!;
+const OFFLINE_QUEUE_KEY = "@offline_queue";
+
+type Product = GetProducts200[number];
 
 export default function PosScreen() {
-  const [basket, setBasket] = useState([]);
-  const [products, setProducts] = useState([] as Product[]);
+  const {
+    items: basket,
+    addItem,
+    removeItem,
+    calculateTotal,
+    clearBasket,
+  } = useBasket();
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
-    fetch("https://kanpla-code-challenge.up.railway.app/products", {
-      headers: {
-        "x-auth-user": AUTH_USER_TOKEN,
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => setProducts(json))
-      .catch((error) => console.error(error));
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsOnline(state.isConnected ?? false);
+    });
+    return () => unsubscribe();
   }, []);
 
-  const renderProduct = ({ item }) => (
-    <TouchableOpacity
-      style={styles.product}
-      onPress={() => setBasket((prev) => [...prev, item])}
-    >
-      <Text style={styles.text}>{item.name}</Text>
-      <Text style={styles.text}>${item.price_unit * (item.vat_rate + 1)}</Text>
-    </TouchableOpacity>
+  const {
+    data,
+    isLoading: isLoadingProducts,
+    error: productsError,
+    refetch: refetchProducts,
+  } = useGetProducts(
+    { "x-auth-user": AUTH_USER_TOKEN },
+    {
+      query: {
+        retry: 3,
+        staleTime: 5 * 60 * 1000,
+      },
+    },
   );
 
-  const createOrder = () => {
-    fetch("https://kanpla-code-challenge.up.railway.app/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-user": AUTH_USER_TOKEN,
+  const products = data?.data ?? [];
+
+  const { mutate: createOrder, isPending: isCreatingOrder } = usePostOrders({
+    mutation: {
+      onMutate: async () => {
+        if (!isOnline) {
+          const order = {
+            basket,
+            total: calculateTotal(),
+            timestamp: Date.now(),
+          };
+          const queue = await getOfflineQueue();
+          await AsyncStorage.setItem(
+            OFFLINE_QUEUE_KEY,
+            JSON.stringify([...queue, order]),
+          );
+          Alert.alert(
+            "Offline Mode",
+            "Order saved and will be processed when online",
+          );
+        }
       },
-      body: JSON.stringify({
-        total: basket.reduce((acc, item) => acc + item.price_unit, 0),
-      }),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        setOrderId(json.id);
-      })
-      .catch((error) => console.error(error));
+      onSuccess: (response) => {
+        setOrderId(response.data.id);
+      },
+      onError: () => {
+        Alert.alert("Error", "Failed to create order. Please try again.");
+      },
+    },
+  });
+
+  const { mutate: payOrder, isPending: isPaying } = usePostPayments({
+    mutation: {
+      onSuccess: () => {
+        clearBasket();
+        setOrderId(null);
+        Alert.alert("Success", "Payment completed successfully!");
+      },
+      onError: () => {
+        Alert.alert("Error", "Payment failed. Please try again.");
+      },
+    },
+  });
+
+  const getOfflineQueue = async () => {
+    try {
+      const queue = await AsyncStorage.getItem(OFFLINE_QUEUE_KEY);
+      return queue ? JSON.parse(queue) : [];
+    } catch {
+      return [];
+    }
   };
 
-  const payOrder = useCallback(() => {
-    fetch(`https://kanpla-code-challenge.up.railway.app/payments`, {
-      method: "POST",
-      headers: {
-        "x-auth-user": AUTH_USER_TOKEN,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+  const handleCreateOrder = () => {
+    createOrder({
+      data: { total: calculateTotal() },
+      headers: { "x-auth-user": AUTH_USER_TOKEN },
+    });
+  };
+
+  const handlePayOrder = () => {
+    if (!orderId) return;
+    payOrder({
+      data: {
         order_id: orderId,
-        amount: basket.reduce((acc, item) => acc + item.price_unit, 0),
-      }),
-    })
-      .then((response) =>
-        response.status === 201 ? response.json() : Promise.reject(response),
-      )
-      .then((json) => {
-        fetch(
-          `https://kanpla-code-challenge.up.railway.app/orders/${json.order_id}`,
-          {
-            method: "PATCH",
-            headers: {
-              "x-auth-user": AUTH_USER_TOKEN,
-            },
-            body: JSON.stringify({
-              status: "completed",
-            }),
-          },
-        )
-          .then((response) =>
-            response.status === 201
-              ? response.json()
-              : Promise.reject(response),
-          )
-          .then((json) => {
-            setBasket([]);
-            setOrderId(null);
-          })
-          .catch((error) => console.error(error));
-      })
-      .catch((error) => console.error(error));
-  }, [orderId, basket]);
+        amount: calculateTotal(),
+      },
+      headers: { "x-auth-user": AUTH_USER_TOKEN },
+    });
+  };
+
+  if (isLoadingProducts) {
+    return (
+      <ThemedView style={styles.centerContainer}>
+        <ActivityIndicator size="large" color="#173829" />
+        <ThemedText>Loading products...</ThemedText>
+      </ThemedView>
+    );
+  }
+
+  if (productsError) {
+    return (
+      <ThemedView style={styles.centerContainer}>
+        <ThemedText style={styles.errorText}>
+          Failed to load products
+        </ThemedText>
+        <TouchableOpacity
+          style={styles.retryButton}
+          onPress={() => refetchProducts()}
+        >
+          <ThemedText style={styles.buttonText}>Retry</ThemedText>
+        </TouchableOpacity>
+      </ThemedView>
+    );
+  }
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={styles.productGrid}>
-        <FlatList
+      {!isOnline && (
+        <ThemedView style={styles.offlineBanner}>
+          <ThemedText style={styles.offlineText}>You are offline</ThemedText>
+        </ThemedView>
+      )}
+
+      <ThemedView style={styles.leftColumn}>
+        <FlatList<Product>
           data={products}
-          renderItem={renderProduct}
+          renderItem={({ item }) => (
+            <ProductItem product={item} onAddToBasket={addItem} />
+          )}
           keyExtractor={(item) => item.id}
-          numColumns={2}
         />
       </ThemedView>
 
-      <ThemedView style={styles.basket}>
-        <ThemedText type="title" style={styles.text}>
-          Basket
-        </ThemedText>
+      <ThemedView style={styles.rightColumn}>
+        <FlatList<Product>
+          data={basket}
+          renderItem={({ item, index }) => (
+            <BasketItem
+              item={item}
+              total={item.price_unit * (1 + item.vat_rate)}
+              onRemove={() => removeItem(index)}
+            />
+          )}
+          keyExtractor={(item, index) => `${item.id}_${index}`}
+          ListFooterComponent={() => (
+            <>
+              <ThemedText style={[styles.text, styles.totalText]}>
+                Total: ${calculateTotal().toFixed(2)}
+              </ThemedText>
 
-        {basket.map((item, index) => (
-          <ThemedView key={index} style={styles.basketItem}>
-            <Text style={styles.text}>{item.name}</Text>
-            <Text style={styles.text}>${item.price}</Text>
-          </ThemedView>
-        ))}
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  basket.length === 0 && styles.disabledButton,
+                ]}
+                onPress={handleCreateOrder}
+                disabled={isCreatingOrder || basket.length === 0}
+              >
+                <ThemedText style={styles.buttonText}>
+                  {isCreatingOrder ? "Creating Order..." : "Create Order"}
+                </ThemedText>
+              </TouchableOpacity>
 
-        <ThemedText style={styles.text}>
-          Total: ${basket.reduce((acc, item) => acc + item.price_unit, 0)}
-        </ThemedText>
-
-        <TouchableOpacity style={styles.button} onPress={createOrder}>
-          <ThemedText style={styles.buttonText}>Create Order</ThemedText>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.button, !orderId && { backgroundColor: "#555" }]}
-          onPress={payOrder}
-          disabled={!orderId}
-        >
-          <ThemedText style={styles.buttonText}>Pay</ThemedText>
-        </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.button,
+                  (!orderId || isPaying) && styles.disabledButton,
+                ]}
+                onPress={handlePayOrder}
+                disabled={!orderId || isPaying}
+              >
+                <ThemedText style={styles.buttonText}>
+                  {isPaying ? "Processing Payment..." : "Pay"}
+                </ThemedText>
+              </TouchableOpacity>
+            </>
+          )}
+        />
       </ThemedView>
     </ThemedView>
   );
@@ -147,40 +227,68 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
   },
-  productGrid: {
-    flex: 2,
-    padding: 10,
-  },
-  product: {
+  leftColumn: {
     flex: 1,
-    margin: 10,
     padding: 10,
-    backgroundColor: "#1e1e1e",
+    backgroundColor: "#f4f4f4",
+  },
+  rightColumn: {
+    flex: 1.5,
+    padding: 10,
+    backgroundColor: "#ffffff",
+    borderLeftWidth: 1,
+    borderLeftColor: "#ddd",
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
-  basket: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "#1e1e1e",
-  },
-  basketItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 5,
+  offlineBanner: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#ff4444",
     padding: 5,
+    zIndex: 1,
+  },
+  offlineText: {
+    color: "white",
+    textAlign: "center",
+    fontWeight: "bold",
   },
   text: {
-    color: "#ffffff",
+    color: "#333",
+  },
+  totalText: {
+    marginVertical: 15,
+    fontSize: 18,
+    fontWeight: "bold",
   },
   button: {
     backgroundColor: "#173829",
-    padding: 10,
-    marginVertical: 10,
-    borderRadius: 5,
+    padding: 12,
+    marginVertical: 5,
+    borderRadius: 8,
     alignItems: "center",
+  },
+  disabledButton: {
+    backgroundColor: "#555",
+    opacity: 0.7,
   },
   buttonText: {
     color: "#ffffff",
     fontWeight: "bold",
+  },
+  retryButton: {
+    backgroundColor: "#173829",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  errorText: {
+    color: "#ff4444",
+    marginBottom: 10,
   },
 });
