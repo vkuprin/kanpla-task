@@ -12,7 +12,9 @@ type Props = {
 export const BasketItem = ({ item, total, onRemove }: Props) => (
   <ThemedView style={styles.container}>
     <ThemedView style={styles.details}>
-      <ThemedText style={styles.name}>{item.name}</ThemedText>
+      <ThemedText style={styles.name} numberOfLines={1} ellipsizeMode="tail">
+        {item.name}
+      </ThemedText>
       <ThemedText style={styles.price}>${total.toFixed(2)}</ThemedText>
     </ThemedView>
     <TouchableOpacity onPress={onRemove}>
@@ -26,28 +28,38 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 12,
-    backgroundColor: "#2a2a2a",
     borderRadius: 8,
     marginBottom: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   details: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     marginRight: 12,
   },
   name: {
+    flex: 1,
     fontSize: 16,
-    color: "#fff",
+    color: "#333",
+    fontWeight: "600",
+    flexShrink: 1,
   },
   price: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#fff",
+    fontWeight: "700",
+    color: "#286429",
+    marginLeft: 8,
   },
   remove: {
     fontSize: 24,
-    color: "#ff4444",
+    color: "#E53935",
     marginLeft: 8,
+    fontWeight: "bold",
   },
 });

@@ -18,7 +18,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useBasket } from "@/hooks/useBasket";
 import { BasketItem } from "@/components/BasketItem";
 import { ProductItem } from "@/components/ProductItem";
-import { GetProducts200 } from "../../services";
+import { GetProducts200 } from "@/services";
 
 const AUTH_USER_TOKEN = process.env.EXPO_PUBLIC_API_KEY!;
 const OFFLINE_QUEUE_KEY = "@offline_queue";
@@ -162,22 +162,17 @@ export default function PosScreen() {
         </ThemedView>
       )}
 
-      <ThemedView style={styles.productGrid}>
+      <ThemedView style={styles.leftColumn}>
         <FlatList<Product>
           data={products}
           renderItem={({ item }) => (
             <ProductItem product={item} onAddToBasket={addItem} />
           )}
           keyExtractor={(item) => item.id}
-          numColumns={2}
         />
       </ThemedView>
 
-      <ThemedView style={styles.basket}>
-        <ThemedText type="title" style={styles.text}>
-          Basket
-        </ThemedText>
-
+      <ThemedView style={styles.rightColumn}>
         <FlatList<Product>
           data={basket}
           renderItem={({ item, index }) => (
@@ -232,6 +227,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
   },
+  leftColumn: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#f4f4f4",
+  },
+  rightColumn: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#ffffff",
+    borderLeftWidth: 1,
+    borderLeftColor: "#ddd",
+  },
   centerContainer: {
     flex: 1,
     justifyContent: "center",
@@ -251,48 +258,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
-  productGrid: {
-    flex: 2,
-    padding: 10,
-  },
-  product: {
-    flex: 1,
-    margin: 5,
-    padding: 15,
-    backgroundColor: "#1e1e1e",
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  basket: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "#1e1e1e",
-  },
-  basketItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 5,
-    padding: 8,
-    backgroundColor: "#2a2a2a",
-    borderRadius: 5,
-  },
   text: {
-    color: "#ffffff",
-  },
-  errorText: {
-    color: "#ff4444",
-    marginBottom: 10,
+    color: "#333",
   },
   totalText: {
     marginVertical: 15,
     fontSize: 18,
     fontWeight: "bold",
-  },
-  removeText: {
-    color: "#ff4444",
-    fontSize: 20,
-    marginLeft: 10,
   },
   button: {
     backgroundColor: "#173829",
@@ -314,5 +286,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
+  },
+  errorText: {
+    color: "#ff4444",
+    marginBottom: 10,
   },
 });
