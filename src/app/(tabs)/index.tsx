@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   FlatList,
@@ -36,7 +36,7 @@ export default function PosScreen() {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOnline(state.isConnected ?? false);
     });
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f4f4f4",
   },
   rightColumn: {
-    flex: 1,
+    flex: 1.5,
     padding: 10,
     backgroundColor: "#ffffff",
     borderLeftWidth: 1,

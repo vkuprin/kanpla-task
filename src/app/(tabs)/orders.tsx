@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ActivityIndicator,
@@ -10,7 +10,7 @@ import { format } from "date-fns";
 import NetInfo from "@react-native-community/netinfo";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useGetOrders } from "../../services";
+import { useGetOrders } from "@/services";
 
 const AUTH_USER_TOKEN = process.env.EXPO_PUBLIC_API_KEY!;
 
@@ -24,9 +24,9 @@ interface Order {
 }
 
 export default function OrdersScreen() {
-  const [isOnline, setIsOnline] = React.useState(true);
+  const [isOnline, setIsOnline] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOnline(state.isConnected ?? false);
     });
@@ -40,17 +40,11 @@ export default function OrdersScreen() {
         query: {
           staleTime: 5 * 60 * 1000, // 5 minutes
           retry: isOnline ? 3 : 0,
-          // onSuccess: () => {
-          //   if (!isOnline) {
-          //     Alert.alert("Connection Restored", "Orders have been updated");
-          //   }
-          // },
         },
       },
     );
 
-  // Handle error outside the query options
-  React.useEffect(() => {
+  useEffect(() => {
     if (isError) {
       Alert.alert(
         "Error",
