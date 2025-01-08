@@ -1,34 +1,57 @@
-import client from '../clients/axios'
-import type { RequestConfig, ResponseErrorConfig, ResponseConfig } from '../clients/axios'
+import client from "../clients/axios";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+  ResponseConfig,
+} from "../clients/axios";
 import type {
   GetPaymentsByIdQueryResponse,
   GetPaymentsByIdPathParams,
   GetPaymentsByIdHeaderParams,
   GetPaymentsById403,
   GetPaymentsById404,
-} from '../types/GetPaymentsById.ts'
-import type { QueryKey, QueryObserverOptions, UseQueryResult } from '@tanstack/react-query'
-import { queryOptions, useQuery } from '@tanstack/react-query'
+} from "../types/GetPaymentsById.ts";
+import type {
+  QueryKey,
+  QueryObserverOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
+import { queryOptions, useQuery } from "@tanstack/react-query";
 
-export const getPaymentsByIdQueryKey = (id: GetPaymentsByIdPathParams['id']) => [{ url: '/payments/:id', params: { id: id } }] as const
+export const getPaymentsByIdQueryKey = (id: GetPaymentsByIdPathParams["id"]) =>
+  [{ url: "/payments/:id", params: { id: id } }] as const;
 
-export type GetPaymentsByIdQueryKey = ReturnType<typeof getPaymentsByIdQueryKey>
+export type GetPaymentsByIdQueryKey = ReturnType<
+  typeof getPaymentsByIdQueryKey
+>;
 
 /**
  * {@link /payments/:id}
  */
-async function getPaymentsById(id: GetPaymentsByIdPathParams['id'], headers: GetPaymentsByIdHeaderParams, config: Partial<RequestConfig> = {}) {
-  const res = await client<GetPaymentsByIdQueryResponse, ResponseErrorConfig<GetPaymentsById403 | GetPaymentsById404>, unknown>({
-    method: 'GET',
+async function getPaymentsById(
+  id: GetPaymentsByIdPathParams["id"],
+  headers: GetPaymentsByIdHeaderParams,
+  config: Partial<RequestConfig> = {},
+) {
+  const res = await client<
+    GetPaymentsByIdQueryResponse,
+    ResponseErrorConfig<GetPaymentsById403 | GetPaymentsById404>,
+    unknown
+  >({
+    method: "GET",
     url: `/payments/${id}`,
     headers: { ...headers, ...config.headers },
     ...config,
-  })
-  return res
+  });
+  return res;
 }
 
-export function getPaymentsByIdQueryOptions(id: GetPaymentsByIdPathParams['id'], headers: GetPaymentsByIdHeaderParams, config: Partial<RequestConfig> = {}) {
-  const queryKey = getPaymentsByIdQueryKey(id)
+export function getPaymentsByIdQueryOptions(
+  id: GetPaymentsByIdPathParams["id"],
+  headers: GetPaymentsByIdHeaderParams,
+  config: Partial<RequestConfig> = {},
+) {
+  const queryKey = getPaymentsByIdQueryKey(id);
   return queryOptions<
     ResponseConfig<GetPaymentsByIdQueryResponse>,
     ResponseErrorConfig<GetPaymentsById403 | GetPaymentsById404>,
@@ -38,10 +61,10 @@ export function getPaymentsByIdQueryOptions(id: GetPaymentsByIdPathParams['id'],
     enabled: !!id,
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal
-      return getPaymentsById(id, headers, config)
+      config.signal = signal;
+      return getPaymentsById(id, headers, config);
     },
-  })
+  });
 }
 
 /**
@@ -52,7 +75,7 @@ export function useGetPaymentsById<
   TQueryData = ResponseConfig<GetPaymentsByIdQueryResponse>,
   TQueryKey extends QueryKey = GetPaymentsByIdQueryKey,
 >(
-  id: GetPaymentsByIdPathParams['id'],
+  id: GetPaymentsByIdPathParams["id"],
   headers: GetPaymentsByIdHeaderParams,
   options: {
     query?: Partial<
@@ -63,20 +86,27 @@ export function useGetPaymentsById<
         TQueryData,
         TQueryKey
       >
-    >
-    client?: Partial<RequestConfig>
+    >;
+    client?: Partial<RequestConfig>;
   } = {},
 ) {
-  const { query: queryOptions, client: config = {} } = options ?? {}
-  const queryKey = queryOptions?.queryKey ?? getPaymentsByIdQueryKey(id)
+  const { query: queryOptions, client: config = {} } = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getPaymentsByIdQueryKey(id);
 
   const query = useQuery({
-    ...(getPaymentsByIdQueryOptions(id, headers, config) as unknown as QueryObserverOptions),
+    ...(getPaymentsByIdQueryOptions(
+      id,
+      headers,
+      config,
+    ) as unknown as QueryObserverOptions),
     queryKey,
-    ...(queryOptions as unknown as Omit<QueryObserverOptions, 'queryKey'>),
-  }) as UseQueryResult<TData, ResponseErrorConfig<GetPaymentsById403 | GetPaymentsById404>> & { queryKey: TQueryKey }
+    ...(queryOptions as unknown as Omit<QueryObserverOptions, "queryKey">),
+  }) as UseQueryResult<
+    TData,
+    ResponseErrorConfig<GetPaymentsById403 | GetPaymentsById404>
+  > & { queryKey: TQueryKey };
 
-  query.queryKey = queryKey as TQueryKey
+  query.queryKey = queryKey as TQueryKey;
 
-  return query
+  return query;
 }

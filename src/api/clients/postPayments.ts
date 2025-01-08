@@ -1,5 +1,5 @@
-import client from '../clients/axios'
-import type { RequestConfig, ResponseErrorConfig } from '../clients/axios'
+import client from "../clients/axios";
+import type { RequestConfig, ResponseErrorConfig } from "../clients/axios";
 import type {
   PostPaymentsMutationRequest,
   PostPaymentsMutationResponse,
@@ -7,10 +7,10 @@ import type {
   PostPayments402,
   PostPayments500,
   PostPayments503,
-} from '../types/PostPayments.ts'
+} from "../types/PostPayments.ts";
 
 export function getPostPaymentsUrl() {
-  return new URL(`/payments/`)
+  return new URL(`/payments/`);
 }
 
 /**
@@ -21,8 +21,16 @@ export async function postPayments(
   headers: PostPaymentsHeaderParams,
   config: Partial<RequestConfig<PostPaymentsMutationRequest>> = {},
 ) {
-  const res = await client<PostPaymentsMutationResponse, ResponseErrorConfig<PostPayments402 | PostPayments500 | PostPayments503>, PostPaymentsMutationRequest>(
-    { method: 'POST', url: getPostPaymentsUrl().toString(), data, headers: { ...headers, ...config.headers }, ...config },
-  )
-  return res.data
+  const res = await client<
+    PostPaymentsMutationResponse,
+    ResponseErrorConfig<PostPayments402 | PostPayments500 | PostPayments503>,
+    PostPaymentsMutationRequest
+  >({
+    method: "POST",
+    url: getPostPaymentsUrl().toString(),
+    data,
+    headers: { ...headers, ...config.headers },
+    ...config,
+  });
+  return res.data;
 }

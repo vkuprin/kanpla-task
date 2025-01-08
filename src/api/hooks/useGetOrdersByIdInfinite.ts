@@ -1,34 +1,59 @@
-import client from '../clients/axios'
-import type { RequestConfig, ResponseErrorConfig, ResponseConfig } from '../clients/axios'
+import client from "../clients/axios";
+import type {
+  RequestConfig,
+  ResponseErrorConfig,
+  ResponseConfig,
+} from "../clients/axios";
 import type {
   GetOrdersByIdQueryResponse,
   GetOrdersByIdPathParams,
   GetOrdersByIdHeaderParams,
   GetOrdersById403,
   GetOrdersById404,
-} from '../types/GetOrdersById.ts'
-import type { InfiniteData, QueryKey, InfiniteQueryObserverOptions, UseInfiniteQueryResult } from '@tanstack/react-query'
-import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query'
+} from "../types/GetOrdersById.ts";
+import type {
+  InfiniteData,
+  QueryKey,
+  InfiniteQueryObserverOptions,
+  UseInfiniteQueryResult,
+} from "@tanstack/react-query";
+import { infiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
 
-export const getOrdersByIdInfiniteQueryKey = (id: GetOrdersByIdPathParams['id']) => [{ url: '/orders/:id', params: { id: id } }] as const
+export const getOrdersByIdInfiniteQueryKey = (
+  id: GetOrdersByIdPathParams["id"],
+) => [{ url: "/orders/:id", params: { id: id } }] as const;
 
-export type GetOrdersByIdInfiniteQueryKey = ReturnType<typeof getOrdersByIdInfiniteQueryKey>
+export type GetOrdersByIdInfiniteQueryKey = ReturnType<
+  typeof getOrdersByIdInfiniteQueryKey
+>;
 
 /**
  * {@link /orders/:id}
  */
-async function getOrdersById(id: GetOrdersByIdPathParams['id'], headers: GetOrdersByIdHeaderParams, config: Partial<RequestConfig> = {}) {
-  const res = await client<GetOrdersByIdQueryResponse, ResponseErrorConfig<GetOrdersById403 | GetOrdersById404>, unknown>({
-    method: 'GET',
+async function getOrdersById(
+  id: GetOrdersByIdPathParams["id"],
+  headers: GetOrdersByIdHeaderParams,
+  config: Partial<RequestConfig> = {},
+) {
+  const res = await client<
+    GetOrdersByIdQueryResponse,
+    ResponseErrorConfig<GetOrdersById403 | GetOrdersById404>,
+    unknown
+  >({
+    method: "GET",
     url: `/orders/${id}`,
     headers: { ...headers, ...config.headers },
     ...config,
-  })
-  return res
+  });
+  return res;
 }
 
-export function getOrdersByIdInfiniteQueryOptions(id: GetOrdersByIdPathParams['id'], headers: GetOrdersByIdHeaderParams, config: Partial<RequestConfig> = {}) {
-  const queryKey = getOrdersByIdInfiniteQueryKey(id)
+export function getOrdersByIdInfiniteQueryOptions(
+  id: GetOrdersByIdPathParams["id"],
+  headers: GetOrdersByIdHeaderParams,
+  config: Partial<RequestConfig> = {},
+) {
+  const queryKey = getOrdersByIdInfiniteQueryKey(id);
   return infiniteQueryOptions<
     ResponseConfig<GetOrdersByIdQueryResponse>,
     ResponseErrorConfig<GetOrdersById403 | GetOrdersById404>,
@@ -38,13 +63,13 @@ export function getOrdersByIdInfiniteQueryOptions(id: GetOrdersByIdPathParams['i
     enabled: !!id,
     queryKey,
     queryFn: async ({ signal }) => {
-      config.signal = signal
-      return getOrdersById(id, headers, config)
+      config.signal = signal;
+      return getOrdersById(id, headers, config);
     },
     initialPageParam: 0,
-    getNextPageParam: (lastPage) => lastPage['nextCursor'],
-    getPreviousPageParam: (firstPage) => firstPage['nextCursor'],
-  })
+    getNextPageParam: (lastPage) => lastPage["nextCursor"],
+    getPreviousPageParam: (firstPage) => firstPage["nextCursor"],
+  });
 }
 
 /**
@@ -55,7 +80,7 @@ export function useGetOrdersByIdInfinite<
   TQueryData = ResponseConfig<GetOrdersByIdQueryResponse>,
   TQueryKey extends QueryKey = GetOrdersByIdInfiniteQueryKey,
 >(
-  id: GetOrdersByIdPathParams['id'],
+  id: GetOrdersByIdPathParams["id"],
   headers: GetOrdersByIdHeaderParams,
   options: {
     query?: Partial<
@@ -66,20 +91,30 @@ export function useGetOrdersByIdInfinite<
         TQueryData,
         TQueryKey
       >
-    >
-    client?: Partial<RequestConfig>
+    >;
+    client?: Partial<RequestConfig>;
   } = {},
 ) {
-  const { query: queryOptions, client: config = {} } = options ?? {}
-  const queryKey = queryOptions?.queryKey ?? getOrdersByIdInfiniteQueryKey(id)
+  const { query: queryOptions, client: config = {} } = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getOrdersByIdInfiniteQueryKey(id);
 
   const query = useInfiniteQuery({
-    ...(getOrdersByIdInfiniteQueryOptions(id, headers, config) as unknown as InfiniteQueryObserverOptions),
+    ...(getOrdersByIdInfiniteQueryOptions(
+      id,
+      headers,
+      config,
+    ) as unknown as InfiniteQueryObserverOptions),
     queryKey,
-    ...(queryOptions as unknown as Omit<InfiniteQueryObserverOptions, 'queryKey'>),
-  }) as UseInfiniteQueryResult<TData, ResponseErrorConfig<GetOrdersById403 | GetOrdersById404>> & { queryKey: TQueryKey }
+    ...(queryOptions as unknown as Omit<
+      InfiniteQueryObserverOptions,
+      "queryKey"
+    >),
+  }) as UseInfiniteQueryResult<
+    TData,
+    ResponseErrorConfig<GetOrdersById403 | GetOrdersById404>
+  > & { queryKey: TQueryKey };
 
-  query.queryKey = queryKey as TQueryKey
+  query.queryKey = queryKey as TQueryKey;
 
-  return query
+  return query;
 }

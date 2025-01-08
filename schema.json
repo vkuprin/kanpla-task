@@ -1,1 +1,1165 @@
-{"openapi":"3.0.3","info":{"title":"Kanpla Code Challenge API","description":"Development documentation","version":"1.0.0"},"paths":{"/products/":{"get":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true}],"responses":{"200":{"items":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"vat_rate":{"type":"number"},"price_unit":{"type":"number"}},"required":["id","name","vat_rate","price_unit"]},"content":{"application/json":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"vat_rate":{"type":"number"},"price_unit":{"type":"number"}},"required":["id","name","vat_rate","price_unit"]}}},"multipart/form-data":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"vat_rate":{"type":"number"},"price_unit":{"type":"number"}},"required":["id","name","vat_rate","price_unit"]}}},"text/plain":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"vat_rate":{"type":"number"},"price_unit":{"type":"number"}},"required":["id","name","vat_rate","price_unit"]}}}}},"503":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}}},"operationId":"getProducts"}},"/products/{id}":{"get":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true},{"schema":{"type":"number"},"in":"path","name":"id","required":true}],"responses":{"200":{"content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"vat_rate":{"type":"number"},"price_unit":{"type":"number"}},"required":["id","name","vat_rate","price_unit"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"vat_rate":{"type":"number"},"price_unit":{"type":"number"}},"required":["id","name","vat_rate","price_unit"]}},"text/plain":{"schema":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"vat_rate":{"type":"number"},"price_unit":{"type":"number"}},"required":["id","name","vat_rate","price_unit"]}}}},"404":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}}},"operationId":"getProductsById"}},"/orders/":{"get":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true}],"responses":{"200":{"items":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]},"content":{"application/json":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}}},"multipart/form-data":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}}},"text/plain":{"schema":{"type":"array","items":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}}}}}},"operationId":"getOrders"},"post":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true}],"responses":{"201":{"content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}},"text/plain":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}}}},"500":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}},"503":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}}},"operationId":"postOrders","requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"total":{"type":"number"},"order_id":{"type":"string"},"basket_id":{"type":"string"}},"required":["total"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"total":{"type":"number"},"order_id":{"type":"string"},"basket_id":{"type":"string"}},"required":["total"]}},"text/plain":{"schema":{"type":"object","properties":{"total":{"type":"number"},"order_id":{"type":"string"},"basket_id":{"type":"string"}},"required":["total"]}}}}}},"/orders/{id}":{"get":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true},{"schema":{"type":"string"},"in":"path","name":"id","required":true}],"responses":{"200":{"content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}},"text/plain":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}}}},"403":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}},"404":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}}},"operationId":"getOrdersById"},"patch":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true},{"schema":{"type":"string"},"in":"path","name":"id","required":true}],"responses":{"200":{"content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}},"text/plain":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount_total":{"type":"number"},"basket_id":{"anyOf":[{"type":"string"},{"type":"null"}]},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["id","amount_total","basket_id","user_id","created_at","status"]}}}},"404":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}}},"operationId":"patchOrdersById","requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["status"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["status"]}},"text/plain":{"schema":{"type":"object","properties":{"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"}]}},"required":["status"]}}}}}},"/payments/":{"post":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true}],"responses":{"201":{"content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}},"text/plain":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}}}},"402":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}},"500":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}},"503":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}}},"operationId":"postPayments","requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","properties":{"order_id":{"type":"string"},"amount":{"type":"number"}},"required":["order_id","amount"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"order_id":{"type":"string"},"amount":{"type":"number"}},"required":["order_id","amount"]}},"text/plain":{"schema":{"type":"object","properties":{"order_id":{"type":"string"},"amount":{"type":"number"}},"required":["order_id","amount"]}}}}}},"/payments/{id}":{"get":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true},{"schema":{"type":"string"},"in":"path","name":"id","required":true}],"responses":{"200":{"content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}},"text/plain":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}}}},"403":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}},"404":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}}},"operationId":"getPaymentsById"},"delete":{"parameters":[{"schema":{"type":"string"},"in":"header","name":"x-auth-user","required":true},{"schema":{"type":"string"},"in":"path","name":"id","required":true}],"responses":{"200":{"content":{"application/json":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}},"multipart/form-data":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}},"text/plain":{"schema":{"type":"object","properties":{"id":{"type":"string"},"amount":{"type":"number"},"user_id":{"type":"string"},"created_at":{"type":"string"},"status":{"anyOf":[{"const":"pending","type":"string"},{"const":"completed","type":"string"},{"const":"failed","type":"string"},{"const":"refunded","type":"string"}]},"type":{"type":"string"},"order_id":{"type":"string"}},"required":["id","amount","user_id","created_at","status","type","order_id"]}}}},"404":{"content":{"application/json":{"schema":{"type":"string"}},"multipart/form-data":{"schema":{"type":"string"}},"text/plain":{"schema":{"type":"string"}}}}},"operationId":"deletePaymentsById"}}},"components":{"schemas":{}}}
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Kanpla Code Challenge API",
+    "description": "Development documentation",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/products/": {
+      "get": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string" },
+                "vat_rate": { "type": "number" },
+                "price_unit": { "type": "number" }
+              },
+              "required": ["id", "name", "vat_rate", "price_unit"]
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "vat_rate": { "type": "number" },
+                      "price_unit": { "type": "number" }
+                    },
+                    "required": ["id", "name", "vat_rate", "price_unit"]
+                  }
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "vat_rate": { "type": "number" },
+                      "price_unit": { "type": "number" }
+                    },
+                    "required": ["id", "name", "vat_rate", "price_unit"]
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "name": { "type": "string" },
+                      "vat_rate": { "type": "number" },
+                      "price_unit": { "type": "number" }
+                    },
+                    "required": ["id", "name", "vat_rate", "price_unit"]
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        },
+        "operationId": "getProducts"
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          },
+          {
+            "schema": { "type": "number" },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "vat_rate": { "type": "number" },
+                    "price_unit": { "type": "number" }
+                  },
+                  "required": ["id", "name", "vat_rate", "price_unit"]
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "vat_rate": { "type": "number" },
+                    "price_unit": { "type": "number" }
+                  },
+                  "required": ["id", "name", "vat_rate", "price_unit"]
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "name": { "type": "string" },
+                    "vat_rate": { "type": "number" },
+                    "price_unit": { "type": "number" }
+                  },
+                  "required": ["id", "name", "vat_rate", "price_unit"]
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        },
+        "operationId": "getProductsById"
+      }
+    },
+    "/orders/": {
+      "get": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "amount_total": { "type": "number" },
+                "basket_id": {
+                  "anyOf": [{ "type": "string" }, { "type": "null" }]
+                },
+                "user_id": { "type": "string" },
+                "created_at": { "type": "string" },
+                "status": {
+                  "anyOf": [
+                    { "const": "pending", "type": "string" },
+                    { "const": "completed", "type": "string" },
+                    { "const": "failed", "type": "string" }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "amount_total",
+                "basket_id",
+                "user_id",
+                "created_at",
+                "status"
+              ]
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "amount_total": { "type": "number" },
+                      "basket_id": {
+                        "anyOf": [{ "type": "string" }, { "type": "null" }]
+                      },
+                      "user_id": { "type": "string" },
+                      "created_at": { "type": "string" },
+                      "status": {
+                        "anyOf": [
+                          { "const": "pending", "type": "string" },
+                          { "const": "completed", "type": "string" },
+                          { "const": "failed", "type": "string" }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "amount_total",
+                      "basket_id",
+                      "user_id",
+                      "created_at",
+                      "status"
+                    ]
+                  }
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "amount_total": { "type": "number" },
+                      "basket_id": {
+                        "anyOf": [{ "type": "string" }, { "type": "null" }]
+                      },
+                      "user_id": { "type": "string" },
+                      "created_at": { "type": "string" },
+                      "status": {
+                        "anyOf": [
+                          { "const": "pending", "type": "string" },
+                          { "const": "completed", "type": "string" },
+                          { "const": "failed", "type": "string" }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "amount_total",
+                      "basket_id",
+                      "user_id",
+                      "created_at",
+                      "status"
+                    ]
+                  }
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "amount_total": { "type": "number" },
+                      "basket_id": {
+                        "anyOf": [{ "type": "string" }, { "type": "null" }]
+                      },
+                      "user_id": { "type": "string" },
+                      "created_at": { "type": "string" },
+                      "status": {
+                        "anyOf": [
+                          { "const": "pending", "type": "string" },
+                          { "const": "completed", "type": "string" },
+                          { "const": "failed", "type": "string" }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "amount_total",
+                      "basket_id",
+                      "user_id",
+                      "created_at",
+                      "status"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "getOrders"
+      },
+      "post": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        },
+        "operationId": "postOrders",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "total": { "type": "number" },
+                  "order_id": { "type": "string" },
+                  "basket_id": { "type": "string" }
+                },
+                "required": ["total"]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "total": { "type": "number" },
+                  "order_id": { "type": "string" },
+                  "basket_id": { "type": "string" }
+                },
+                "required": ["total"]
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "total": { "type": "number" },
+                  "order_id": { "type": "string" },
+                  "basket_id": { "type": "string" }
+                },
+                "required": ["total"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          },
+          {
+            "schema": { "type": "string" },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        },
+        "operationId": "getOrdersById"
+      },
+      "patch": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          },
+          {
+            "schema": { "type": "string" },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount_total": { "type": "number" },
+                    "basket_id": {
+                      "anyOf": [{ "type": "string" }, { "type": "null" }]
+                    },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount_total",
+                    "basket_id",
+                    "user_id",
+                    "created_at",
+                    "status"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        },
+        "operationId": "patchOrdersById",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "anyOf": [
+                      { "const": "pending", "type": "string" },
+                      { "const": "completed", "type": "string" },
+                      { "const": "failed", "type": "string" }
+                    ]
+                  }
+                },
+                "required": ["status"]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "anyOf": [
+                      { "const": "pending", "type": "string" },
+                      { "const": "completed", "type": "string" },
+                      { "const": "failed", "type": "string" }
+                    ]
+                  }
+                },
+                "required": ["status"]
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "anyOf": [
+                      { "const": "pending", "type": "string" },
+                      { "const": "completed", "type": "string" },
+                      { "const": "failed", "type": "string" }
+                    ]
+                  }
+                },
+                "required": ["status"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/": {
+      "post": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              }
+            }
+          },
+          "402": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        },
+        "operationId": "postPayments",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "order_id": { "type": "string" },
+                  "amount": { "type": "number" }
+                },
+                "required": ["order_id", "amount"]
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "order_id": { "type": "string" },
+                  "amount": { "type": "number" }
+                },
+                "required": ["order_id", "amount"]
+              }
+            },
+            "text/plain": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "order_id": { "type": "string" },
+                  "amount": { "type": "number" }
+                },
+                "required": ["order_id", "amount"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          },
+          {
+            "schema": { "type": "string" },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        },
+        "operationId": "getPaymentsById"
+      },
+      "delete": {
+        "parameters": [
+          {
+            "schema": { "type": "string" },
+            "in": "header",
+            "name": "x-auth-user",
+            "required": true
+          },
+          {
+            "schema": { "type": "string" },
+            "in": "path",
+            "name": "id",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              },
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "amount": { "type": "number" },
+                    "user_id": { "type": "string" },
+                    "created_at": { "type": "string" },
+                    "status": {
+                      "anyOf": [
+                        { "const": "pending", "type": "string" },
+                        { "const": "completed", "type": "string" },
+                        { "const": "failed", "type": "string" },
+                        { "const": "refunded", "type": "string" }
+                      ]
+                    },
+                    "type": { "type": "string" },
+                    "order_id": { "type": "string" }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "user_id",
+                    "created_at",
+                    "status",
+                    "type",
+                    "order_id"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": { "schema": { "type": "string" } },
+              "multipart/form-data": { "schema": { "type": "string" } },
+              "text/plain": { "schema": { "type": "string" } }
+            }
+          }
+        },
+        "operationId": "deletePaymentsById"
+      }
+    }
+  },
+  "components": { "schemas": {} }
+}

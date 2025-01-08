@@ -7,7 +7,5 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],
-  "exclude": [
-    "src/api/**"
-  ]
+  "exclude": ["src/api/**"]
 }
