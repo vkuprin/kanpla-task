@@ -16,7 +16,5 @@
     "expo-env.d.ts",
     "env.d.ts"
   ],
-  "exclude": [
-    "src/services/**/*"
-  ]
+  "exclude": ["src/services/**/*"]
 }
